@@ -134,9 +134,9 @@ export default {
         display: block;
         position: absolute;
         right: 0;
-        width: 30px;
+        width: 40px;
         height: 50px;
-        border-radius: 10px;
+        border-radius: 3px;
         background: #ffffff;
         opacity: 0.93;
       }
