@@ -4,26 +4,46 @@
       h4.calculator--form__title.title Ежегодный взнос
       input#range-input(
         v-model="sum"
+        maxLength="7"
+        @focus="clearRubles"
+        @blur="addRubles"
+        @input="change($event.target.value)"
       )
-      p.calculator__sub-title.sub-title от 100 000 ₽
+      p.calculator__sub-title.sub-title(v-if="!error") от 100 000 ₽
+      p.calculator__sub-title.sub-title.sub-title__error(v-else) от 100 000 ₽ до 5 000 000 ₽
   .calculator--info
     h4.info-title.title Срок программы
     .info-time
-      p 5 лет
+      p {{time}} лет
 
 </template>
 
 <script>
 export default {
+  props: {
+    sum: {
+      type: String,
+    },
+    error: {
+      type: Boolean,
+    },
+    time: {
+      type: Number
+    }
+  },
   data() {
-    return {
-      sum: "120 000 ₽",
-    };
+    return {};
   },
   methods: {
-    test() {
-      console.log("Логика работает");
+    clearRubles() {
+      this.$emit("on-focus", this.sum);
     },
+    addRubles() {
+      this.$emit("on-blur", this.sum);
+    },
+    change(e) {
+      this.$emit('changeValue', e)
+    }
   },
 };
 </script>

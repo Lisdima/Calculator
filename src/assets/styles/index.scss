@@ -77,7 +77,7 @@ input[type="checkbox"] {
     margin-top: 32px;
   }
   @media (max-width: 480px) {
-    width: 100%;
+    width: 87%;
   }
 }
 
@@ -94,6 +94,10 @@ input[type="checkbox"] {
   line-height: 16px;
   font-weight: 300;
   color: $grey-light;
+  &__error {
+    color: #ba0042;
+    font-weight: 600;
+  }
 }
 .question {
   margin-left: 10px;

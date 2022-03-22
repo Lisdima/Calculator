@@ -6,43 +6,46 @@
             .item-info
                 span.item-info__time 1-й год
                 span.item-info__bonus.best-bonus +30%
-            span.item-money 36 000 ₽
+            span.item-money {{Math.floor(currentSum * 0.30 + bonus)}} ₽
         .calculation-item.item
             .item-info
                 span.item-info__time 2-й год
                 span.item-info__bonus +12%
-            span.item-money 14 400 ₽
+            span.item-money {{Math.floor(currentSum * 0.14 + bonus)}} ₽
         .calculation-item.item
             .item-info
                 span.item-info__time 3-й год
                 span.item-info__bonus +8%
-            span.item-money 9 600 ₽
+            span.item-money {{Math.floor(currentSum * 0.08 + bonus)}} ₽
         .calculation-item.item
             .item-info
                 span.item-info__time 4-й год
                 span.item-info__bonus +8%
-            span.item-money 9 600 ₽
+            span.item-money {{Math.floor(currentSum * 0.08 + bonus)}} ₽
         .calculation-item.item
             .item-info
                 span.item-info__time 5-й год
                 span.item-info__bonus +8%
-            span.item-money 9 600 ₽
+            span.item-money {{Math.floor(currentSum * 0.08 + bonus)}} ₽
+        .calculation-item__opacity
     .dividing-line
     .block-deducation
         .deducation-checkbox
             label.block-checkbox.block-checkbox__deducation Получу налоговый вычет
-                input(type="checkbox")
+                input(type="checkbox"
+                v-model="checked"
+                @change="chooseOption(checked)")
                 span.checkmark
             .deducation-checkbox__description
                 span +15 600 ₽ в год
                 .deducation__question.question
                     p ?
         .deducation-total
-            .deducation-total__name Взносы за 5 лет
-            .deducation-total__sum 600 000 ₽
+            .deducation-total__name Взносы за {{time}} лет
+            .deducation-total__sum {{(currentSum * time)}} ₽
     Options.deducation-options
     .payments-block__issue
-      button.btn.payments-block__btn Оформить
+      button.btn.payments-block__btn(:disabled="disabled" :class="{'disabled': disabled}") Оформить
 
                      
 </template>
@@ -51,8 +54,39 @@
 import Options from "@/components/AdditionalOptions.vue";
 
 export default {
+  props: {
+    sum: {
+      type: String,
+    },
+    time: {
+      type: Number,
+    },
+  },
   components: {
     Options,
+  },
+  data() {
+    return {
+      bonus: 0,
+    };
+  },
+  methods: {
+    chooseOption(value) {
+      value === true ? (this.bonus = this.currentSum * 0.13) : (this.bonus = 0);
+      Math.floor(this.bonus) > 15600 ? (this.bonus = 15600) : (this.bonus = Math.floor(this.bonus));
+    },
+  },
+  computed: {
+    disabled() {
+      const sum = this.sum.replace(/\D/gi, "");
+      if (sum < 100000 || sum > 5000000) {
+        return true;
+      }
+      return false;
+    },
+    currentSum() {
+      return this.sum.replace(/[^\d]/g, "");
+    },
   },
 };
 </script>
@@ -72,6 +106,22 @@ export default {
       white-space: nowrap;
       &::-webkit-scrollbar {
         display: none;
+      }
+    }
+    @media (max-width: 480px) {
+      padding-right: 30px
+    }
+    .calculation-item__opacity {
+      display: none;
+      @media (max-width: 480px) {
+        display: block;
+        position: absolute;
+        right: 0;
+        width: 30px;
+        height: 50px;
+        border-radius: 10px;
+        background: #ffffff;
+        opacity: 0.93;
       }
     }
   }
@@ -105,6 +155,12 @@ export default {
   }
   &__issue {
     margin-top: 24px;
+    .disabled {
+      opacity: 0.8;
+      &:hover {
+        cursor: not-allowed;
+      }
+    }
   }
 }
 .block-deducation {
