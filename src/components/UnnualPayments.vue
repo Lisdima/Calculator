@@ -5,28 +5,28 @@
         .calculation-item.item
             .item-info
                 span.item-info__time 1-й год
-                span.item-info__bonus.best-bonus +30%
-            span.item-money {{Math.floor(currentSum * 0.30 + bonus)}} ₽
+                span.item-info__bonus.best-bonus +{{checked ? Math.floor((currentSum * 0.30 + tax) / currentSum * 100) : Math.floor((currentSum * 0.30) / currentSum * 100)}}%
+            span.item-money {{checked ? Math.floor(currentSum * 0.30 + tax) : Math.floor(currentSum * 0.30)}} ₽
         .calculation-item.item
             .item-info
                 span.item-info__time 2-й год
-                span.item-info__bonus +12%
-            span.item-money {{Math.floor(currentSum * 0.14 + bonus)}} ₽
+                span.item-info__bonus +{{checked ? Math.floor((currentSum * 0.14 + tax) / currentSum * 100) : Math.floor((currentSum * 0.14) / currentSum * 100)}}%
+            span.item-money {{checked ? Math.floor(currentSum * 0.14 + tax) : Math.floor(currentSum * 0.14)}} ₽
         .calculation-item.item
             .item-info
                 span.item-info__time 3-й год
-                span.item-info__bonus +8%
-            span.item-money {{Math.floor(currentSum * 0.08 + bonus)}} ₽
+                span.item-info__bonus +{{checked ? Math.floor((currentSum * 0.08 + tax) / currentSum * 100) : Math.floor((currentSum * 0.08) / currentSum * 100)}}%
+            span.item-money {{checked ? Math.floor(currentSum * 0.08 + tax) : Math.floor(currentSum * 0.08)}} ₽
         .calculation-item.item
             .item-info
                 span.item-info__time 4-й год
-                span.item-info__bonus +8%
-            span.item-money {{Math.floor(currentSum * 0.08 + bonus)}} ₽
+                span.item-info__bonus +{{checked ? Math.floor((currentSum * 0.08 + tax) / currentSum * 100) : Math.floor((currentSum * 0.08) / currentSum * 100)}}%
+            span.item-money {{checked ? Math.floor(currentSum * 0.08 + tax) : Math.floor(currentSum * 0.08)}} ₽
         .calculation-item.item
             .item-info
                 span.item-info__time 5-й год
-                span.item-info__bonus +8%
-            span.item-money {{Math.floor(currentSum * 0.08 + bonus)}} ₽
+                span.item-info__bonus +{{checked ? Math.floor((currentSum * 0.08 + tax) / currentSum * 100) : Math.floor((currentSum * 0.08) / currentSum * 100)}}%
+            span.item-money {{checked ? Math.floor(currentSum * 0.08 + tax) : Math.floor(currentSum * 0.08)}} ₽
         .calculation-item__opacity
     .dividing-line
     .block-deducation
@@ -37,7 +37,7 @@
                 @change="chooseOption(checked)")
                 span.checkmark
             .deducation-checkbox__description
-                span +15 600 ₽ в год
+                span +{{tax}} ₽ в год
                 .deducation__question.question
                     p ?
         .deducation-total
@@ -68,12 +68,13 @@ export default {
   data() {
     return {
       bonus: 0,
+      checked: false
     };
   },
   methods: {
     chooseOption(value) {
-      value === true ? (this.bonus = this.currentSum * 0.13) : (this.bonus = 0);
-      Math.floor(this.bonus) > 15600 ? (this.bonus = 15600) : (this.bonus = Math.floor(this.bonus));
+      value === true ? (this.bonus = this.tax) : (this.bonus = 0);
+      // Math.floor(this.bonus) > 15600 ? (this.bonus = 15600) : (this.bonus = Math.floor(this.bonus));
     },
   },
   computed: {
@@ -86,6 +87,22 @@ export default {
     },
     currentSum() {
       return this.sum.replace(/[^\d]/g, "");
+    },
+    profit(value) {
+      if (value === 1) {
+        return Math.floor(this.currentSum * 0.3 + this.tax);
+      }
+      if (value === 2) {
+        return Math.floor(this.currentSum * 0.14 + this.tax);
+      }
+      return Math.floor(this.currentSum * 0.08 + this.tax);
+    },
+    tax() {
+      let TAX = this.currentSum * 0.13;
+      if (TAX >= 15600) {
+        return (TAX = 15600);
+      }
+      return Math.floor(TAX);
     },
   },
 };
@@ -109,7 +126,7 @@ export default {
       }
     }
     @media (max-width: 480px) {
-      padding-right: 30px
+      padding-right: 30px;
     }
     .calculation-item__opacity {
       display: none;
