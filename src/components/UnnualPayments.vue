@@ -144,7 +144,7 @@ export default {
   }
   .item {
     max-width: 98px;
-    margin-right: 15px;
+    margin-right: 14px;
     &:last-child {
       margin-right: 0;
     }
