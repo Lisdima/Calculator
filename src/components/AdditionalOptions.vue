@@ -3,7 +3,8 @@
     .options--headers
         .options--headers__title.title Дополнительные опции
         .options--headers__question.question
-          p ?
+          p(@click.stop="$emit('onclick-tooltip-opts')") ?
+          span(:class="{'tooltip-active': tooltipOptions}") Сервисы и защита, которую можно подключить
     .options--item
       label.block-checkbox.block-checkbox__option.block-checkbox__disabled Телемедицина 
         b бесплатно
@@ -13,6 +14,14 @@
         span Онлайн-консультации
 
 </template>
+
+<script>
+export default {
+  props: {
+    tooltipOptions: Boolean,
+  },
+};
+</script>
 
 <style lang="scss">
 .options {

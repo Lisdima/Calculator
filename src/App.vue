@@ -8,10 +8,19 @@
       @on-focus="clearRubles"
       @on-blur="addRubles"
       @changeValue="change")
-    Options.options-block
+    Options.options-block(
+      :tooltipOptions="tooltipOptions"
+      @onclick-tooltip-opts="tooltipOptions = true"
+    )
   .section-right
-    Payments(:sum="sum"
-    :time="time")
+    Payments(
+    :sum="sum"
+    :time="time"
+    :tooltipPayments="tooltipPayments"
+    :tooltipOptions="tooltipOptions"
+    @onclick-tooltip-paymets="tooltipPayments = true"
+    @onclick-tooltip-opts="tooltipOptions = true"
+    )
 
 </template>
 
@@ -32,7 +41,13 @@ export default {
       sum: "120 000 ₽",
       error: false,
       time: 5,
+      tooltipOptions: false,
+      tooltipPayments: false
     };
+  },
+  created() {
+    document.addEventListener('click', () => this.tooltipOptions = false);
+    document.addEventListener('click', () => this.tooltipPayments = false); 
   },
   methods: {
     clearRubles(value) {

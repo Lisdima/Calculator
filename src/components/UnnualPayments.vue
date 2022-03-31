@@ -39,13 +39,18 @@
             .deducation-checkbox__description
                 span +{{tax}} ₽ в год
                 .deducation__question.question
-                    p ?
+                    p(@click.stop="$emit('onclick-tooltip-paymets')") ?
+                    span(:class="{'tooltip-active': tooltipPayments}") Это возврат уплаченных вами в «казну» налогов.
+                      a(href="#rec426212205")  Подробнее в ответах
         .deducation-total
             .deducation-total__name Взносы за {{time}} лет
             .deducation-total__sum {{(currentSum * time)}} ₽
-    Options.deducation-options
+    Options.deducation-options(
+      :tooltipOptions="tooltipOptions"
+      @onclick-tooltip-opts="$emit('onclick-tooltip-opts')")
     .payments-block__issue
-      button.btn.payments-block__btn(:disabled="disabled" :class="{'disabled': disabled}") Оформить
+      a(href="#popup:myform")
+        button.btn.payments-block__btn(:disabled="disabled" :class="{'disabled': disabled}") Оформить
 
                      
 </template>
@@ -61,6 +66,10 @@ export default {
     time: {
       type: Number,
     },
+    tooltipPayments: {
+      type: Boolean
+    },
+    tooltipOptions: Boolean,
   },
   components: {
     Options,
@@ -68,7 +77,7 @@ export default {
   data() {
     return {
       bonus: 0,
-      checked: false
+      checked: false,
     };
   },
   methods: {
@@ -227,8 +236,20 @@ export default {
       }
     }
     .deducation__question {
+      position: relative;
       margin-left: 8px;
       color: #28323c;
+      .tooltip-active {
+        a {
+          color: #3E70BB
+        }
+        @media (max-width: 960px) {
+          left: -500%;
+        }
+        @media (max-width: 640px) {
+          left: -300%;
+        }
+      }
     }
   }
   .deducation-total {
